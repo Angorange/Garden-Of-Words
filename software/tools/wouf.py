@@ -4,12 +4,16 @@
 #Qui contient un lexique basé sur
 #ODS7
 #En scollant le site : listesdemots.net
-#requis :l beautifulsoup4
+#requis :l beautifulsoup4 request html5lib
 #(cmd : pip install beautifulsoup4)
+#(cmd : pip install request)
+#(cmd : pip install html5lib)
  
 import requests
 from bs4 import BeautifulSoup
-fichier = open("dico.txt", "w")
+
+filename = "../../data/lexique_fr.txt"
+fichier = open(filename, "w")
  
 #   Initialisation:
 url="https://www.listesdemots.net/touslesmots"
@@ -27,10 +31,9 @@ for l in lesmots:
 print()
 print("page 1 : OK ("+str(len(lesmots))+")")
 totalmot=len(lesmots)
-fichier.close()
+
 #page 2 à 8998:
 for i in range(2,899):
-    fichier = open("dico.txt", "a")
     lurl=url+"page"+str(i)+".htm"
     ok=False
     while not ok:
@@ -51,8 +54,9 @@ for i in range(2,899):
     totalmot+=len(lesmots)
     print()
     print("page "+str(i)+" : OK ("+str(len(lesmots))+"/"+str(totalmot)+")")
-    fichier.close()
-#fin du scipt:
+    
+fichier.close()
+#fin du script:
   
  
 print("mots :",totalmot)
