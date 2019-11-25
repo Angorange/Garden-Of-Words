@@ -26,7 +26,7 @@ def test_find_anagrams(letters):
         for i in reversed(range(1, len(letters) + 1)):
             res = sorted([word for word in anagram_dic[key] if len(word) == i])
 
-            if len(res) > 1:
+            if len(res) != 0:
                 print (i, "letters (", len(res), "):", res)
         
 
