@@ -13,8 +13,8 @@ import pickle
 
 def trim_lexicon(src_name, dst_name, min_letter, max_letter):
 
-    print("Generate: " + dst_name)
-    print("Keep only word from " + str(min_letter) + " letters to " + str(max_letter) + " letters")
+    print("Generate:", dst_name)
+    print("Keep only word from", min_letter, "letters to", max_letter, "letters")
 
     srcFile = open(src_name, "r")
     allLines = srcFile.readlines()
@@ -35,14 +35,14 @@ def trim_lexicon(src_name, dst_name, min_letter, max_letter):
 
     dstFile.close()
 
-    print("Total word: " +str(total))
+    print("Total word:", total)
 
     for index in range (min_letter, max_letter + 1):
-        print(str(index) + " letters words: " + str(stats[index]))
+        print(index, "letters words:", stats[index])
 
 
 
-def hash(word): 
+def hash_word(word): 
     result = "" 
 
     return result.join(sorted(word))
@@ -54,7 +54,7 @@ def hash(word):
 
 def group_by_anagrams(src_name, dst_name):
 
-    print("Generate: " + dst_name)
+    print("Generate:", dst_name)
 
     srcFile = open(src_name, "r")
     allLines = srcFile.readlines()
@@ -64,7 +64,7 @@ def group_by_anagrams(src_name, dst_name):
 
     for line in allLines:
         word = line.strip()
-        key = hash(word)
+        key = hash_word(word)
 
         if key not in d: 
             d[key] = [] # Creates the entry if it does not exist yet
@@ -73,28 +73,6 @@ def group_by_anagrams(src_name, dst_name):
     dstFile = open(dst_name,"wb")
     pickle.dump(d, dstFile, pickle.HIGHEST_PROTOCOL)
     dstFile.close()
-
-
-    max_friends = 0
-
-    stats = [0] * 100
-
-    for i, (k, v) in enumerate(d.items()):
-        anagram_count = len(v)
-
-        if anagram_count < len(stats):
-            stats[anagram_count] += 1
-        elif (anagram_count > max_friends):
-            max_friends += anagram_count
-
-    print("Number of entry : " + str(len(d)))
-
-    for index in range (len(stats)):
-        if stats[index] != 0:
-            print("Entry with " + str(index) + " anagrams: " + str(stats[index]))
-    
-    if max_friends != 0:
-        print ("!!! Need to increment stats to: " + str(max_friends) + " !!!")
 
 
 # From the itertools page : https://docs.python.org/3/library/itertools.html#itertools-recipes
@@ -113,7 +91,7 @@ def generate_combinations(key):
 
     result = powerset(key)
 
-    result = (hash(r) for r in result)
+    result = (hash_word(r) for r in result)
 
     # Removing duplicates
     result = dict.fromkeys(result)
@@ -139,7 +117,7 @@ def find_included_anagrams(key, anagrams_dic):
 
 def group_by_included_anagrams(anagrams_src_filename, dst_filename):
 
-    print("Generate: " + dst_filename)
+    print("Generate:", dst_filename)
 
     srcFile = open(anagrams_src_filename, "rb")
     anagrams_dic = pickle.load(srcFile)
@@ -154,27 +132,6 @@ def group_by_included_anagrams(anagrams_src_filename, dst_filename):
     dstFile = open(dst_filename, "wb")
     pickle.dump(included_anagrams_dic, dstFile, pickle.HIGHEST_PROTOCOL)
     dstFile.close()
-
-    max_friends = 0
-
-    stats = [0] * 100
-
-    for i, (k, v) in enumerate(included_anagrams_dic.items()):
-        anagram_count = len(v)
-
-        if anagram_count < len(stats):
-            stats[anagram_count] += 1
-        elif (anagram_count > max_friends):
-            max_friends += anagram_count
-
-    print("Number of entry : " + str(len(included_anagrams_dic)))
-
-    for index in range (len(stats)):
-        if stats[index] != 0:
-            print("Entry with " + str(index) + " anagrams: " + str(stats[index]))
-    
-    if max_friends != 0:
-        print ("!!! Need to increment stats to: " + str(max_friends) + " !!!")
 
 
 
@@ -209,9 +166,9 @@ def test_find_anagrams(letters):
     anagram_dic = pickle.load(src_file)
     src_file.close()
 
-    key = hash(letters)
+    key = hash_word(letters)
 
-    print(letters + ":" + str(sorted(anagram_dic[key])))
+    print(letters, ":", sorted(anagram_dic[key]))
 
 
 create_JDM_files()
