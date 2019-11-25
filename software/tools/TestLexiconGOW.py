@@ -33,6 +33,6 @@ def test_find_anagrams(letters):
 
 
 if len(sys.argv) != 2:
-    print ("Needs anagram letters as an input : python TestLexiconGOW.py ABCDEFG")
+    print ("Needs anagram letters as an input (capital letters): python TestLexiconGOW.py ABCDEFG")
 else:
     test_find_anagrams(sys.argv[1])
