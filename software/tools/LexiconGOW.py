@@ -74,9 +74,13 @@ def group_by_anagrams(src_name, dst_name):
     pickle.dump(d, dstFile, pickle.HIGHEST_PROTOCOL)
     dstFile.close()
 
+    print ("Number of entries:", len(d))
+    print ("Number of words:", len(allLines))
+
 
 # From the itertools page : https://docs.python.org/3/library/itertools.html#itertools-recipes
 # Generates all combinations possible
+
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
@@ -90,7 +94,6 @@ def powerset(iterable):
 def generate_combinations(key):
 
     result = powerset(key)
-
     result = (hash_word(r) for r in result)
 
     # Removing duplicates
@@ -125,13 +128,21 @@ def group_by_included_anagrams(anagrams_src_filename, dst_filename):
 
     included_anagrams_dic = dict()
 
+    total = 0
+
     for key in anagrams_dic.keys():
-        included_anagrams_dic[key] = find_included_anagrams(key, anagrams_dic)
+        res = find_included_anagrams(key, anagrams_dic)
+        total += len(res)
+        included_anagrams_dic[key] = res
 
 
     dstFile = open(dst_filename, "wb")
     pickle.dump(included_anagrams_dic, dstFile, pickle.HIGHEST_PROTOCOL)
     dstFile.close()
+
+    print ("Number of entries:", len(included_anagrams_dic))
+    print ("Number of words (including duplicate):", total)
+
 
 
 
