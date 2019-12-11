@@ -47,7 +47,7 @@ def find_included_anagrams(key, anagrams_dic):
     return result
 
 
-def test_find_anagrams2(letters):
+def test_find_anagrams(letters):
 
     path = "../../data/"
     anagrams_dict_file = "anagrams_fr_3_7.bin"
@@ -58,18 +58,18 @@ def test_find_anagrams2(letters):
 
     key = hash_word(letters)
 
-    res = find_included_anagrams(key, anagram_dic)
+    allresult = find_included_anagrams(key, anagram_dic)
 
-    if len(res) == 0:
+    if len(allresult) == 0:
         print ("No anagrams found for:", letters)
     else:
-        print ("Anagrams for", letters, ":", len(res))
+        print ("Anagrams for", letters, ":", len(allresult))
 
         for i in reversed(range(1, len(letters) + 1)):
-            res2 = sorted([word for word in res if len(word) == i])
+            res = sorted([word for word in allresult if len(word) == i])
 
-            if len(res2) != 0:
-                print (i, "letters (", len(res2), "):", res2)
+            if len(res) != 0:
+                print (i, "letters (", len(res), "):", res)
 
 
 if len(sys.argv) != 2:
