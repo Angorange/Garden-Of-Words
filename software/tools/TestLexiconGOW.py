@@ -1,3 +1,4 @@
+from itertools import chain, combinations
 import pickle
 import sys
 
@@ -6,30 +7,69 @@ def hash_word(word):
 
     return result.join(sorted(word))
 
-def test_find_anagrams(letters):
+# From the itertools page : https://docs.python.org/3/library/itertools.html#itertools-recipes
+# Generates all combinations possible
+
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+# Uses powerset to generate all combinations
+# Hashes each element of the combinations
+# Removes duplicate
+# Returns the list
+
+def generate_combinations(key):
+
+    result = powerset(key)
+    result = (hash_word(r) for r in result)
+
+    # Removing duplicates
+    result = dict.fromkeys(result)
+
+    return result
+
+
+def find_included_anagrams(key, anagrams_dic):
+    
+    combinations = generate_combinations(key)
+
+    result = list()
+
+    for combination_key in combinations:
+        if combination_key in anagrams_dic:
+            result = result + anagrams_dic[combination_key]
+
+    # Removing duplicates
+    result = list(dict.fromkeys(result))
+
+    return result
+
+
+def test_find_anagrams2(letters):
 
     path = "../../data/"
-    included_anagrams_dict_file = path + "included_anagrams_fr_3_7.bin"
-
+    anagrams_dict_file = "anagrams_fr_3_7.bin"
     
-    src_file = open(included_anagrams_dict_file, "rb")
+    src_file = open(path + anagrams_dict_file, "rb")
     anagram_dic = pickle.load(src_file)
     src_file.close()
 
     key = hash_word(letters)
 
-    if key not in anagram_dic:
+    res = find_included_anagrams(key, anagram_dic)
+
+    if len(res) == 0:
         print ("No anagrams found for:", letters)
     else:
-        print ("Anagrams for", letters, ":", len(anagram_dic[key]))
+        print ("Anagrams for", letters, ":", len(res))
 
         for i in reversed(range(1, len(letters) + 1)):
-            res = sorted([word for word in anagram_dic[key] if len(word) == i])
+            res2 = sorted([word for word in res if len(word) == i])
 
-            if len(res) != 0:
-                print (i, "letters (", len(res), "):", res)
-        
-
+            if len(res2) != 0:
+                print (i, "letters (", len(res2), "):", res2)
 
 
 if len(sys.argv) != 2:
